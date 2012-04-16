@@ -34,27 +34,27 @@
 #define MININT	    (std::numeric_limits<int>::min())
 
 struct sData {
-	sData() {};
+  sData() {};
 
-	// grid settings
-	int dimI;		// number of nodes in x/xi
-	int dimJ;		// number of nodes in y/eta
-        double deltaX;          // delta x
-        double deltaY;          // delta y
+  // grid settings
+  int dimI;		// number of nodes in x/xi
+  int dimJ;		// number of nodes in y/eta
+  double deltaX;          // delta x
+  double deltaY;          // delta y
 
-	double** x;		// node position in x - x[i][j]
-	double** y;		// node position in y - y[i][j]
+  double** x;		// node position in x - x[i][j]
+  double** y;		// node position in y - y[i][j]
 
-    double** s1;            // scalar value on node[i][j]
+  double** s1;            // scalar value on node[i][j]
 
-	double** xi;
-	double** eta;
-		
+  double** xi;
+  double** eta;
 
-	// solver settings
-	int maxIter;
-	double residuum;
-	double overrelax;
+
+  // solver settings
+  int maxIter;
+  double residuum;
+  double overrelax;
 };
 
 double**  allocGrid1Mem(const sData* const data, const double preset);

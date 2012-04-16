@@ -22,6 +22,7 @@
 
 #include "data.h"
 
+float abs(float x);
 bool solve(sData* data);
 bool jacobi(sData* data, double** s);
 bool gaussseidelMorphed(sData* data, double** s);

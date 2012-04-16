@@ -25,53 +25,53 @@
 //------------------------------------------------------
 bool setup(sData* data)
 {
-        std::cout << "\nSetup:\n-------\n";
+  std::cout << "\nSetup:\n-------\n";
 
-	///////////////////
-	// SETUP XY-GRID //
-	///////////////////
-	for(int i=0; i<data->dimI; i++) {
-		for(int j=0; j<data->dimJ; j++) {
-			data->x[i][j] = data->deltaX *i;
-			data->y[i][j] = data->deltaY *j;
-		}
-	}
+  ///////////////////
+  // SETUP XY-GRID //
+  ///////////////////
+  for(int i=0; i<data->dimI; i++) {
+      for(int j=0; j<data->dimJ; j++) {
+          data->x[i][j] = data->deltaX *i;
+          data->y[i][j] = data->deltaY *j;
+      }
+  }
 
-	/////////////////////////////////
-	// SETUP INITIAL SCALAR VALUES //
-	/////////////////////////////////
-	// set whole field 's1' to start value
-	for(int i=0; i<data->dimI; i++) {
-		for(int j=0; j<data->dimJ; j++) {
-                    data->s1[i][j] = 0;
-		}
-	}
+  /////////////////////////////////
+  // SETUP INITIAL SCALAR VALUES //
+  /////////////////////////////////
+  // set whole field 's1' to start value
+  for(int i=0; i<data->dimI; i++) {
+      for(int j=0; j<data->dimJ; j++) {
+          data->s1[i][j] = 0;
+      }
+  }
 
-	//////////////////////////////////
-	// SETUP BOUNDARY SCALAR VALUES //
-	//////////////////////////////////
-		float foo = 1;
-		float u_inf = 5;
-       	float x =0;
-		float y = 0;     
+  //////////////////////////////////
+  // SETUP BOUNDARY SCALAR VALUES //
+  //////////////////////////////////
+  float Eover2PI = 1;
+  float u_inf = 5;
+  float x =0;
+  float y = 0;
 
-	for(int i=0; i<data->dimI; i++) {
+  for(int i=0; i<data->dimI; i++) {
 
-		x = data->x[i][0] - 1.1f;
-		y = 0 - 0.5f;
-		data->s1[i][0] = u_inf*i*data->deltaX + foo * log((x*x+y*y))/2;	
-		//x = data->x[i][data->dimJ-1]- 1.1f;
-		data->s1[i][data->dimJ-1]= u_inf*i*data->deltaX + foo * log((x*x+y*y))/2;	
-	}
-	for(int j=0; j<data->dimJ; j++) {
+      x = data->x[i][0] - 1.1f;
+      y = 0 - 0.5f;
+      data->s1[i][0] = u_inf*i*data->deltaX + Eover2PI * log((x*x+y*y))/2;
+      //x = data->x[i][data->dimJ-1]- 1.1f;
+      data->s1[i][data->dimJ-1]= u_inf*i*data->deltaX + Eover2PI * log((x*x+y*y))/2;
+  }
+  for(int j=0; j<data->dimJ; j++) {
 
-		x = 0- 1.1f;
-		y = data->y[0][j] - 0.5f;
-		data->s1[0][j] = u_inf*0 + foo * log((x*x+y*y))/2;	
-		x = 0-1.1f;
-		//y = data->y[data->dimI-1][j]- 0.5f;
-		data->s1[data->dimI-1][j]= u_inf*1.f +foo * log((pow(0.1,2)+y*y))/2;	
-	}
+      x = 0- 1.1f;
+      y = data->y[0][j] - 0.5f;
+      data->s1[0][j] = u_inf*0 + Eover2PI * log((x*x+y*y))/2;
+      x = 0-1.1f;
+      //y = data->y[data->dimI-1][j]- 0.5f;
+      data->s1[data->dimI-1][j]= u_inf*1.f +Eover2PI * log((pow(0.1,2)+y*y))/2;
+  }
 
-	return true;
+  return true;
 }

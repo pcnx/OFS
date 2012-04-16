@@ -24,34 +24,34 @@
 //------------------------------------------------------
 double** allocGrid1Mem(const sData* const data, const double preset)
 {
-	// allocate memory -- no error-check
-	double** tmpPtr = (double**)malloc(data->dimI*sizeof(double*));
-	for(int x=0; x<data->dimI; x++) {
-		tmpPtr[x] = (double*)malloc(data->dimJ*sizeof(double));
-		for(int y=0; y<data->dimJ; y++) { tmpPtr[x][y] = preset; }
-	}
-	return tmpPtr;
+  // allocate memory -- no error-check
+  double** tmpPtr = (double**)malloc(data->dimI*sizeof(double*));
+  for(int x=0; x<data->dimI; x++) {
+      tmpPtr[x] = (double*)malloc(data->dimJ*sizeof(double));
+      for(int y=0; y<data->dimJ; y++) { tmpPtr[x][y] = preset; }
+  }
+  return tmpPtr;
 }
 
 //------------------------------------------------------
 void freeGrid1Mem(const sData* const data, double** mem)
 {
-	for(int i=0; i<data->dimI; i++) {
-		free(mem[i]);
-	}
+  for(int i=0; i<data->dimI; i++) {
+      free(mem[i]);
+  }
 }
 
 //------------------------------------------------------
 double*** allocGridXMem(const sData* const data, const int vSize, const double preset)
 {
-	// allocate memory -- no error-check
-	double*** tmpPtr = (double***)malloc(vSize*sizeof(double**));
-	for(int s=0; s<vSize; s++) {
-		tmpPtr[s] = (double**)malloc(data->dimI*sizeof(double*));
-		for(int i=0; i<data->dimI; i++) {
-			tmpPtr[s][i] = (double*)malloc(data->dimJ*sizeof(double));
-			for(int j=0; j<data->dimJ; j++) { tmpPtr[s][i][j] = preset; }
-		}
-	}
-	return tmpPtr;
+  // allocate memory -- no error-check
+  double*** tmpPtr = (double***)malloc(vSize*sizeof(double**));
+  for(int s=0; s<vSize; s++) {
+      tmpPtr[s] = (double**)malloc(data->dimI*sizeof(double*));
+      for(int i=0; i<data->dimI; i++) {
+          tmpPtr[s][i] = (double*)malloc(data->dimJ*sizeof(double));
+          for(int j=0; j<data->dimJ; j++) { tmpPtr[s][i][j] = preset; }
+      }
+  }
+  return tmpPtr;
 }

@@ -24,163 +24,182 @@
 #include "data.h"
 #include "setup.h"
 
+
+float abs(float x)
+{
+  return x>0 ? x : -x;
+}
 //------------------------------------------------------
 bool solve(sData* data)
 {
-        std::cout << "\nSolve:\n-------\n";
+  std::cout << "\nSolve:\n-------\n";
 
-	if(!gaussseidelMorphed(data,data->s1))	{ return false; }
-	//if(!jacobi(data, data->s1))	{ return false; }
-	//if(!thomas(data,data->s1))	{ return false; }
+  //if(!gaussseidelMorphed(data,data->s1)){ return false; }
+  if(!gaussseidel(data,data->s1)){ return false; }
+  //if(!jacobi(data, data->s1))	{ return false; }
+  //if(!thomas(data,data->s1))r	{ return false; }
 
-	return true;
+  return true;
 }
 
 //------------------------------------------------------
 bool gaussseidel(sData* data, double** s)
 {
-	int curIter=0;
-	float maxDiff = 0;
-	float diff = s[0][0];
-	float tmp;
+  int curIter=0;
 
-	while(curIter<data->maxIter) {
-                std::cout << "\r\tGauss-Seidel: Iteration " << ++curIter;
-				maxDiff =0;
-				for(int i = 1; i < data->dimI-1; i++)
-				{
-					for(int j = 1 ; j < data->dimJ-1; j++)
-					{
-					//Iterate over all values except border values
-					tmp =(s[i-1][j]+s[i+1][j]+s[i][j+1]+s[i][j-1])/4;
-					diff = diff-tmp;
-					
-					maxDiff += myAbs(diff);
-					s[i][j] = tmp;
-					
-					}
-				
-				}
+  float error ;
+  float tmp;
 
-				
-				if(maxDiff < data->residuum)
-						break;
-			
-	}
-	double ** tmp5 = new double*[data->dimI] ;
-	for(int i=0; i < data->dimI; i++)
-	{
-	tmp5[i] = new double[data->dimJ];
-	}
-	for(int i = 0; i < data->dimI; i++)
-	{
-		tmp5[i][0] = s[i][0];
-		tmp5[i][data->dimJ-1] = s[i][data->dimJ-1];
-	}
-	for(int j = 0 ; j < data->dimJ; j++)
-	{
-		tmp5[0][j] = s[0][j];
-		tmp5[data->dimI-1][j] = s[data->dimJ-1][j];
-	}
+  while(curIter<data->maxIter) {
+      std::cout << "\r\tGauss-Seidel: Iteration " << ++curIter;
+      error = 0;
+      for(int i = 1; i < data->dimI-1; i++)
+        {
+          for(int j = 1 ; j < data->dimJ-1; j++)
+            {
+              //Iterate over all values except border values
+              tmp =(s[i-1][j]+s[i+1][j]+s[i][j+1]+s[i][j-1])/4.0;
+              error += abs(tmp-s[i][j]);
 
-					for(int i = 1; i < data->dimI-1; i++)
-					{
-					for(int j = 0 ; j < data->dimJ; j++)
-					{
-						tmp5[i][j] = (s[i+1][j] - s[i-1][j])/(2);
-						
-					}
-					}
-					data->s1 = tmp5;
-	return true;
+              s[i][j] = tmp;
+
+            }
+
+        }
+
+
+      if(error < data->residuum)
+        return true;
+
+  }
+  double ** tmp5 = new double*[data->dimI] ;
+  for(int i=0; i < data->dimI; i++)
+    {
+      tmp5[i] = new double[data->dimJ];
+    }
+  for(int i = 0; i < data->dimI; i++)
+    {
+      tmp5[i][0] = s[i][0];
+      tmp5[i][data->dimJ-1] = s[i][data->dimJ-1];
+    }
+  for(int j = 0 ; j < data->dimJ; j++)
+    {
+      tmp5[0][j] = s[0][j];
+      tmp5[data->dimI-1][j] = s[data->dimJ-1][j];
+    }
+
+  for(int i = 1; i < data->dimI-1; i++)
+    {
+      for(int j = 0 ; j < data->dimJ; j++)
+        {
+          tmp5[i][j] = (s[i+1][j] - s[i-1][j])/(2);
+
+        }
+    }
+  data->s1 = tmp5;
+  return true;
 }
 
 bool gaussseidelMorphed(sData* data, double** s)
 {
-	int curIter=0;
-	float maxDiff = 0;
-	float diff = s[0][0];
-	float tmp;
-	while(curIter<data->maxIter) {
-                std::cout << "\r\tGauss-Seidel: Iteration " << ++curIter;
-				maxDiff =0;
-				for(int i = 1; i < data->dimI-1; i++)
-				{
-					for(int j = 1 ; j < data->dimJ-1; j++)
-					{
-					//Iterate over all values except border values
-						tmp = 1/(2*(a1+a2))*(a1 *(s[i+1][j]+s[i-1][j]) + a2* (s[i][j+1]+s[i][j-1]) +a3/4* (s[i+1][j+1]-s[i-1][j+1]-s[i+1][j-1]+s[i-1][j-1]) + a4/2 * (s[i+1][j]-s[i-1][j]) + a5/2 * (s[i][j+1]+s[i][j-1]));
-					diff = diff-tmp;
-					
-					maxDiff += myAbs(diff);
-					s[i][j] = tmp;
-					
-					}
-				
-				}
+  int curIter=0;
+  float maxDiff = 0;
+  float diff = s[0][0];
+  float tmp;
+  double a1, a2, a3, a4 ,a5;
+  a1 =1;
+  a2 =2;
+  a3 =3;
+  a4 =4;
+  a5 =5;
+  while(curIter<data->maxIter) {
+      std::cout << "\r\tGauss-Seidel: Iteration " << ++curIter;
+      maxDiff =0;
+      for(int i = 1; i < data->dimI-1; i++)
+        {
+          for(int j = 1 ; j < data->dimJ-1; j++)
+            {
 
-				
-				if(maxDiff < data->residuum)
-						break;
-			
-	}
-	return true;
+              //Iterate over all values except border values
+              tmp = 1/(2*(a1+a2))*(a1 *(s[i+1][j]+s[i-1][j]) + a2* (s[i][j+1]+s[i][j-1]) +a3/4* (s[i+1][j+1]-s[i-1][j+1]-s[i+1][j-1]+s[i-1][j-1]) + a4/2 * (s[i+1][j]-s[i-1][j]) + a5/2 * (s[i][j+1]+s[i][j-1]));
+              diff = diff-tmp;
+
+              maxDiff += abs(diff);
+              s[i][j] = tmp;
+
+            }
+
+        }
+
+
+      if(maxDiff < data->residuum)
+        break;
+
+  }
+  return true;
 }
 
-//------------------------------------------------------
 bool jacobi(sData* data, double** s)
 {
-	int curIter=0;
-	double** tmp_ptr;
+  int curIter=0;
+  double** tmp_ptr;
 
-	double** s_old = s;
-	double** s_new = allocGrid1Mem(data,MAXDOUBLE);
+  double** s_old = s;
+  double** s_new = allocGrid1Mem(data,MAXDOUBLE);
+  double error;
+  double temp;
+  for (int i= 0; i<data->dimI;i++){
+      s_new[i][0] = s_old[i][0];
+      s_new[i][data->dimJ-1]=s_old[i][data->dimJ-1];
+  }
+  for (int i=0;i<data->dimJ;i++){
+      s_new[0][i] = s_old[0][i];
+      s_new[data->dimI-1][i]=s_old[data->dimI-1][i];
+  }
 
-	while(curIter<data->maxIter) {
-            std::cout << "\r\tJakobi: Iteration " << ++curIter;
+  while(curIter<data->maxIter ) {
+      std::cout << "\r\tJakobi: Iteration " << ++curIter;
+      error = 0;
 
-            // 1. loop over grid points
-                  // TODO
+      for (int i=1;i< data->dimI-1;i++){
+          for (int j=1;j<data->dimJ-1;j++){
+              temp = (s_old[i-1][j] +s_old[i+1][j] + s_old[i][j-1]+s_old[i][j+1])/4.0;
+              error += abs( temp- s_old[i][j]);
+              s_new[i][j] = temp;
+          }
+      }
 
-            // 2. possible overrelaxation
-                  // TODO
+      tmp_ptr = s_old;
+      s_old = s_new;
+      s_new  = tmp_ptr;
 
-            // 3. new data-set becomes old data-set
-		tmp_ptr = s_old;
-		s_old = s_new;
-		s_new = s_old;
+      // if (error < data->residuum) return true;
 
-            // 3. break on min diff
-                  // TODO
-	}
+  }
 
-	// sync data-fields if nessessary
-	if(s!=s_old) {
-		for(int i=0; i<data->dimI; i++) {
-			for(int j=0; j<data->dimJ; j++) {
-				s_new[i][j] = s_old[i][j];
-			}
-		}
-		tmp_ptr = s_old;
-		s_old = s_new;
-		s_new = s_old;
-	}
+  // sync data-fields if nessessary
+  if(s!=s_old) {
+      for(int i=0; i<data->dimI; i++) {
+          for(int j=0; j<data->dimJ; j++) {
+              s_new[i][j] = s_old[i][j];
+          }
+      }
+      tmp_ptr = s_old;
+      s_old = s_new;
+      s_new = tmp_ptr;
+  }
 
-	// free temp. memory (make sure you are not freeing memory s points to!)
-	freeGrid1Mem(data,s_new);
+  // free temp. memory (make sure you are not freeing memory s points to!)
+  freeGrid1Mem(data,s_new);
 
-	return true;
+  return true;
 }
 
 //------------------------------------------------------
 bool thomas(sData* data, double** s)
 {
-	// optional
-	return true;
+  // optional
+  return true;
 }
 
-float myAbs(float x)
-{
 
-    return (x > 0) ? x : -x;
-}

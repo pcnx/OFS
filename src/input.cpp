@@ -28,52 +28,52 @@
 //------------------------------------------------------
 bool input(const char* cfgFilePath, sData* data, int &errLine)
 {
-	std::cout << "\nInput:\n-------\n";
+  std::cout << "\nInput:\n-------\n";
 
-	///////////////////////
-	// READ CONFIG FILE  //
-	///////////////////////
-	errLine = 0;
-	int lineNo;
-	char line[256]=" ", token[16]=" ";
+  ///////////////////////
+  // READ CONFIG FILE  //
+  ///////////////////////
+  errLine = 0;
+  int lineNo;
+  char line[256]=" ", token[16]=" ";
 
-	// open input file
-	std::ifstream cfgFile(cfgFilePath);
-	if(!cfgFile) { return false; }
+  // open input file
+  std::ifstream cfgFile(cfgFilePath);
+  if(!cfgFile) { return false; }
 
-	// read input file line by line
-	lineNo=0;
-	while(!cfgFile.eof()) {
-		lineNo++;
-		cfgFile.getline(line,255);
+  // read input file line by line
+  lineNo=0;
+  while(!cfgFile.eof()) {
+      lineNo++;
+      cfgFile.getline(line,255);
 
-		if(sscanf(line,"%15s",token)<1) { continue; };	// skip empty lines
-		if(!strcmp(token,"#")) {						// skip comment lines
-		} else if(!strcmp(token,"dimI")) {
-			if(sscanf(line,"%15s %d",token,&data->dimI)	!= 2){ errLine = lineNo; return false; };
-		} else if(!strcmp(token,"dimJ")) {
-			if(sscanf(line,"%15s %d",token,&data->dimJ)	!= 2){ errLine = lineNo; return false; };
-		} else if(!strcmp(token,"deltaX")) {
-			if(sscanf(line,"%15s %lf",token,&data->deltaX)	!= 2){ errLine = lineNo; return false; };
-		} else if(!strcmp(token,"deltaY")) {
-			if(sscanf(line,"%15s %lf",token,&data->deltaY)	!= 2){ errLine = lineNo; return false; };
-		} else if(!strcmp(token,"maxIter")) {
-			if(sscanf(line,"%15s %d",token,&data->maxIter)	!= 2){ errLine = lineNo; return false; };
-		} else if(!strcmp(token,"residuum")) {
-			if(sscanf(line,"%15s %lf",token,&data->residuum)!= 2){ errLine = lineNo; return false; };
-		} else if(!strcmp(token,"overrelax")) {
-			if(sscanf(line,"%15s %lf",token,&data->overrelax)!= 2){ errLine = lineNo; return false; };
-		} else {
-			std::cout << "unknown token: " << token << std::endl;
-			return false;
-		}
-	}
-	cfgFile.close();
+      if(sscanf(line,"%15s",token)<1) { continue; };	// skip empty lines
+      if(!strcmp(token,"#")) {						// skip comment lines
+      } else if(!strcmp(token,"dimI")) {
+          if(sscanf(line,"%15s %d",token,&data->dimI)	!= 2){ errLine = lineNo; return false; };
+      } else if(!strcmp(token,"dimJ")) {
+          if(sscanf(line,"%15s %d",token,&data->dimJ)	!= 2){ errLine = lineNo; return false; };
+      } else if(!strcmp(token,"deltaX")) {
+          if(sscanf(line,"%15s %lf",token,&data->deltaX)	!= 2){ errLine = lineNo; return false; };
+      } else if(!strcmp(token,"deltaY")) {
+          if(sscanf(line,"%15s %lf",token,&data->deltaY)	!= 2){ errLine = lineNo; return false; };
+      } else if(!strcmp(token,"maxIter")) {
+          if(sscanf(line,"%15s %d",token,&data->maxIter)	!= 2){ errLine = lineNo; return false; };
+      } else if(!strcmp(token,"residuum")) {
+          if(sscanf(line,"%15s %lf",token,&data->residuum)!= 2){ errLine = lineNo; return false; };
+      } else if(!strcmp(token,"overrelax")) {
+          if(sscanf(line,"%15s %lf",token,&data->overrelax)!= 2){ errLine = lineNo; return false; };
+      } else {
+          std::cout << "unknown token: " << token << std::endl;
+          return false;
+      }
+  }
+  cfgFile.close();
 
-	data->x		= allocGrid1Mem(data, MAXDOUBLE);
-	data->y		= allocGrid1Mem(data, MAXDOUBLE);
-	data->s1	= allocGrid1Mem(data, MAXDOUBLE);
-	data->xi	= allocGrid1Mem(data,MAXDOUBLE);
-	data->eta	= allocGrid1Mem(data,MAXDOUBLE);
-	return true;
+  data->x		= allocGrid1Mem(data, MAXDOUBLE);
+  data->y		= allocGrid1Mem(data, MAXDOUBLE);
+  data->s1	= allocGrid1Mem(data, MAXDOUBLE);
+  data->xi	= allocGrid1Mem(data,MAXDOUBLE);
+  data->eta	= allocGrid1Mem(data,MAXDOUBLE);
+  return true;
 }

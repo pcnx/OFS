@@ -29,44 +29,44 @@
 //------------------------------------------------------
 int main(int argc, char* argv[])
 {
-    sData* data = new sData;
-    char* cfgFilePath;
-    int errLine = 0;
+  sData* data = new sData;
+  char* cfgFilePath;
+  int errLine = 0;
 
-    std::cout << "\tSimulationstechnik V \n\t====================\n";
-    cfgFilePath = (char*)"cfg.txt";
+  std::cout << "\tSimulationstechnik V \n\t====================\n";
+  cfgFilePath = (char*)"run/cfg.txt";
 
-    // read config from input file
-    if(!input(cfgFilePath,data, errLine)) {
-            std::cout << "ERROR while reading input file in line " << errLine << " ...exiting";
-            getchar();
-            return 1;
-    }
+  // read config from input file
+  if(!input(cfgFilePath,data, errLine)) {
+      std::cout << "ERROR while reading input file in line " << errLine << " ...exiting";
+      getchar();
+      return 1;
+  }
 
-    // setup data (boundaries, initial data, etc.)
-    if(!setup(data)) {
-            std::cout << "ERROR while data setup...exiting";
-            getchar();
-            return 1;
-    }
+  // setup data (boundaries, initial data, etc.)
+  if(!setup(data)) {
+      std::cout << "ERROR while data setup...exiting";
+      getchar();
+      return 1;
+  }
 
-    // iterativ solver
-    if(!solve(data)) {
-            std::cout << "ERROR while solving...exiting";
-            getchar();
-            return 1;
-    }
+  // iterativ solver
+  if(!solve(data)) {
+      std::cout << "ERROR while solving...exiting";
+      getchar();
+      return 1;
+  }
 
-    // output data
-    if(!output(data)) {
-            std::cout << "ERROR while data output...exiting";
-            getchar();
-            return 1;
-    }
+  // output data
+  if(!output(data)) {
+      std::cout << "ERROR while data output...exiting";
+      getchar();
+      return 1;
+  }
 
-    std::cout << "Success...";
-    getchar();
+  std::cout << "Success...";
+  getchar();
 
-    delete data;
-    return 0;
+  delete data;
+  return 0;
 }
