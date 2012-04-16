@@ -75,3 +75,65 @@ bool setup(sData* data)
 
   return true;
 }
+
+
+double xiof(double x){
+  return x/3.14159;
+
+}
+double etaof(double x, double y){
+  return (y+sin(x))/(sin(x)+1+cos(x));
+
+}
+double xof(double xi){
+  return 0+xi*(3.14169-0);
+}
+double yof(double xi, double eta){
+  return sin(xof(eta))+eta*(1+cos(xof(eta))-sin(xof(eta)));
+
+}
+
+
+double dxi(sData* data, int i, int j, bool xdirection){
+
+  if (xdirection){
+      return (xiof(data->x[i+1][j])-xiof(data->x[i-1][j]))/(2*data->deltaX);
+  }
+  else{
+      return (xiof(data->y[i][j+1])-xiof(data->y[i][j-1]))/(2*data->deltaY);
+  }
+}
+
+double deta(sData* data, int i, int j, bool xdirection){
+
+  if (xdirection){
+      return (etaof(data->x[i+1][j],data->y[i][j])-etaof(data->x[i-1][j],data->y[i][j]))/(2*data->deltaX);
+  }
+  else{
+      return (etaof(data->x[i][j],data->y[i][j+1])-etaof(data->x[i][j],data->y[i][j-1]))/(2*data->deltaY);
+  }
+}
+
+
+
+double ddxi(sData* data, int i, int j, bool xdirection){
+
+  if (xdirection){
+      return (xiof(data->x[i+1][j])-2*xiof(data->x[i][j])+xiof(data->x[i-1][j]))/(data->deltaX*data->deltaX);
+  }
+  else{
+      return (xiof(data->y[i][j+1])-2*xiof(data->y[i][j])+xiof(data->y[i][j-1]))/(data->deltaY*data->deltaY);
+  }
+}
+
+double ddeta(sData* data, int i, int j, bool xdirection){
+
+  if (xdirection){
+      return (etaof(data->x[i+1][j],data->y[i][j])-2*etaof(data->x[i][j],data->y[i][j])+etaof(data->x[i-1][j],data->y[i][j]))/(data->deltaX*data->deltaX);
+  }
+  else{
+      return (etaof(data->x[i][j],data->y[i][j+1])-2*etaof(data->x[i][j],data->y[i][j])+etaof(data->x[i][j],data->y[i][j-1]))/(data->deltaY*data->deltaY);
+  }
+}
+
+

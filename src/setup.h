@@ -23,5 +23,12 @@
 #include "data.h"
 
 bool setup(sData* data);
-
+double xiof(double x );
+double etaof(double x, double y);
+double xof( double eta);
+double yof( double eta, double xi);
+double deta(sData* data, int i, int j, bool xdirection);
+double dxi(sData* data, int i, int j, bool xdirection);
+double ddeta(sData* data, int i, int j, bool xdirection);
+double ddxi(sData* data, int i, int j, bool xdirection);
 #endif

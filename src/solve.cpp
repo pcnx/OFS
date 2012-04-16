@@ -25,7 +25,7 @@
 #include "setup.h"
 
 
-float abs(float x)
+float fabs(float x)
 {
   return x>0 ? x : -x;
 }
@@ -59,7 +59,7 @@ bool gaussseidel(sData* data, double** s)
             {
               //Iterate over all values except border values
               tmp =(s[i-1][j]+s[i+1][j]+s[i][j+1]+s[i][j-1])/4.0;
-              error += abs(tmp-s[i][j]);
+              error += fabs(tmp-s[i][j]);
 
               s[i][j] = tmp;
 
@@ -72,31 +72,6 @@ bool gaussseidel(sData* data, double** s)
         return true;
 
   }
-  double ** tmp5 = new double*[data->dimI] ;
-  for(int i=0; i < data->dimI; i++)
-    {
-      tmp5[i] = new double[data->dimJ];
-    }
-  for(int i = 0; i < data->dimI; i++)
-    {
-      tmp5[i][0] = s[i][0];
-      tmp5[i][data->dimJ-1] = s[i][data->dimJ-1];
-    }
-  for(int j = 0 ; j < data->dimJ; j++)
-    {
-      tmp5[0][j] = s[0][j];
-      tmp5[data->dimI-1][j] = s[data->dimJ-1][j];
-    }
-
-  for(int i = 1; i < data->dimI-1; i++)
-    {
-      for(int j = 0 ; j < data->dimJ; j++)
-        {
-          tmp5[i][j] = (s[i+1][j] - s[i-1][j])/(2);
-
-        }
-    }
-  data->s1 = tmp5;
   return true;
 }
 
@@ -122,9 +97,24 @@ bool gaussseidelMorphed(sData* data, double** s)
 
               //Iterate over all values except border values
               tmp = 1/(2*(a1+a2))*(a1 *(s[i+1][j]+s[i-1][j]) + a2* (s[i][j+1]+s[i][j-1]) +a3/4* (s[i+1][j+1]-s[i-1][j+1]-s[i+1][j-1]+s[i-1][j-1]) + a4/2 * (s[i+1][j]-s[i-1][j]) + a5/2 * (s[i][j+1]+s[i][j-1]));
+
+              /* my finite diff approach
+               * tmp =    s[i+1][j+1]   * (a3/4)
+               *        + s[i+1][j]     * (a1+a4/2)
+               *        + s[i+1][j-1]   * (-a3/4)
+               *        + s[i][j+1]     * (a2+a5/2)
+               *        + s[i][j-1]     * (a2-a5/2)
+               *        + s[i-1][j+1]   * (-a3/4)
+               *        + s[i-1][j]     * (a1-a4/2)
+               *        + s[i-1][j-1]   * (a3/4);
+               * tmp /= (a1+a2-a6);
+               *
+               *
+               */
+
               diff = diff-tmp;
 
-              maxDiff += abs(diff);
+              maxDiff += fabs(diff);
               s[i][j] = tmp;
 
             }
@@ -162,9 +152,10 @@ bool jacobi(sData* data, double** s)
       error = 0;
 
       for (int i=1;i< data->dimI-1;i++){
+
           for (int j=1;j<data->dimJ-1;j++){
               temp = (s_old[i-1][j] +s_old[i+1][j] + s_old[i][j-1]+s_old[i][j+1])/4.0;
-              error += abs( temp- s_old[i][j]);
+              error += fabs( temp- s_old[i][j]);
               s_new[i][j] = temp;
           }
       }
