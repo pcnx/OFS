@@ -1,0 +1,10 @@
+
+dimI		100
+dimJ		100
+
+deltaX		0.01
+deltaY		0.01
+
+maxIter		100000
+residuum	1.0E-2
+overrelax	1.0
