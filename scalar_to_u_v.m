@@ -2,10 +2,9 @@ function  scalar_to_u_v
 close all
 
 
-
+    
 load('scalar.dat');
 scalar = scalar(1:10,1:10);
-
 [U,V] = gradient(scalar);
 % figure(1)
 % mesh(U)

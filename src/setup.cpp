@@ -43,7 +43,7 @@ bool setup(sData* data)
   // set whole field 's1' to start value
   for(int i=0; i<data->dimI; i++) {
       for(int j=0; j<data->dimJ; j++) {
-          data->s1[i][j] = 0;
+          data->s1[i][j] = 13.37;
       }
   }
 
@@ -59,18 +59,18 @@ bool setup(sData* data)
 
       x = data->x[i][0] - 1.1f;
       y = 0 - 0.5f;
-      data->s1[i][0] = u_inf*i*data->deltaX + Eover2PI * log((x*x+y*y))/2;
+      data->s1[i][0] = 1;//u_inf*i*data->deltaX + Eover2PI * log((x*x+y*y))/2;
       //x = data->x[i][data->dimJ-1]- 1.1f;
-      data->s1[i][data->dimJ-1]= u_inf*i*data->deltaX + Eover2PI * log((x*x+y*y))/2;
+      data->s1[i][data->dimJ-1]=1;// u_inf*i*data->deltaX + Eover2PI * log((x*x+y*y))/2;
   }
   for(int j=0; j<data->dimJ; j++) {
 
       x = 0- 1.1f;
       y = data->y[0][j] - 0.5f;
-      data->s1[0][j] = u_inf*0 + Eover2PI * log((x*x+y*y))/2;
+      data->s1[0][j] =1;// u_inf*0 + Eover2PI * log((x*x+y*y))/2;
       x = 0-1.1f;
       //y = data->y[data->dimI-1][j]- 0.5f;
-      data->s1[data->dimI-1][j]= u_inf*1.f +Eover2PI * log((pow(0.1,2)+y*y))/2;
+      data->s1[data->dimI-1][j]= 1;//u_inf*1.f +Eover2PI * log((pow(0.1,2)+y*y))/2;
   }
 
   return true;
@@ -78,18 +78,18 @@ bool setup(sData* data)
 
 
 double xiof(double x){
-  return x/3.14159;
+  return 2*x; //x/3.14159;
 
 }
 double etaof(double x, double y){
-  return (y+sin(x))/(sin(x)+1+cos(x));
+  return 2*y;//y/(x+1);//(y+sin(x))/(sin(x)+1+cos(x));
 
 }
 double xof(double xi){
-  return 0+xi*(3.14169-0);
+  return xi/2;//0+xi*(3.14169-0);
 }
 double yof(double xi, double eta){
-  return sin(xof(eta))+eta*(1+cos(xof(eta))-sin(xof(eta)));
+  return eta/2;//eta*(1+xi);//sin(xof(eta))+eta*(1+cos(xof(eta))-sin(xof(eta)));
 
 }
 

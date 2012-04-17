@@ -100,6 +100,9 @@ bool gaussseidelMorphed(sData* data, double** s)
               xiyy=ddxi(data,i,j,0);
               etaxx=ddeta(data,i,j,1);
               etayy=ddeta(data,i,j,0);
+              if (fabs(xix)>1e3 ||fabs(xiy)>1e3 || fabs(etax)>1e3|| fabs(etay)>1e3|| fabs(xixx)>1e3||fabs(xiyy)>1e3|| fabs(etaxx)>1e3||fabs(etayy)>1e3){
+                  std::cout << "\n ERROR HIER IST WAS ZU GROSS \n";
+              }
 
               a1 = xix*xix+xiy*xiy;
               a2 = etax*etax+etay*etay;
@@ -110,12 +113,12 @@ bool gaussseidelMorphed(sData* data, double** s)
 
 
               //Iterate over all values except border values
-         //     tmp = 1/(2*(a1+a2-a6))*(a1 *(s[i+1][j]+s[i-1][j])
-           //      + a2* (s[i][j+1]+s[i][j-1]) +a3/4* (s[i+1][j+1]-s[i-1][j+1]-s[i+1][j-1]+s[i-1][j-1])
-             //     + a4/2 * (s[i+1][j]-s[i-1][j]) + a5/2 * (s[i][j+1]+s[i][j-1]));
+             tmp = 1/(2*(a1+a2-a6))*(a1 *(s[i+1][j]+s[i-1][j])
+                 + a2* (s[i][j+1]+s[i][j-1]) +a3/4* (s[i+1][j+1]-s[i-1][j+1]-s[i+1][j-1]+s[i-1][j-1])
+                  + a4/2 * (s[i+1][j]-s[i-1][j]) + a5/2 * (s[i][j+1]+s[i][j-1]));
 
               // my finite diff approach
-                tmp =    s[i+1][j+1]   * (a3/4.f)
+              /*  tmp =    s[i+1][j+1]   * (a3/4.f)
                        + s[i+1][j]     * (a1+a4/2.f)
                        + s[i+1][j-1]   * (-a3/4.f)
                        + s[i][j+1]     * (a2+a5/2.f)
@@ -123,8 +126,8 @@ bool gaussseidelMorphed(sData* data, double** s)
                        + s[i-1][j+1]   * (-a3/4.f)
                        + s[i-1][j]     * (a1-a4/2.f)
                        + s[i-1][j-1]   * (a3/4.f);
-                tmp /=(a1+a2-a6);
-           //     if (tmp>1e10) { std::cout << "ERROR "; return -1;}
+                tmp /=(2*(a1+a2-a6));*/
+             if (tmp>1e10) { std::cout << "ERROR\n "  ;}
 
 
 
