@@ -27,13 +27,14 @@
 //------------------------------------------------------
 bool output(sData* data)
 {
-  std::cout << "\nOutput:\n-------\n";
+  std::cout << "\nOutput below:";
 
   showScalar(data, "scalar 1", data->s1);
 
   if( !saveGrid(data, "phyGrid") ) 				{ return false; }
   if( !saveScalar(data, "scalar.dat",data->s1) )	{ return false; }
 
+  std::cout << "Success...\n";
   return true;
 }
 

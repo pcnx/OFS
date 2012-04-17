@@ -33,13 +33,13 @@ float fabs(float x)
 //------------------------------------------------------
 bool solve(sData* data)
 {
-  std::cout << "\nSolve:\n-------\n";
+  std::cout << "\nSolve:\t-------\t";
 
   if(!gaussseidelMorphed(data,data->s1)){ return false; }
   //if(!gaussseidel(data,data->s1)){ return false; }
   //if(!jacobi(data, data->s1))	{ return false; }
   //if(!thomas(data,data->s1))r	{ return false; }
-
+  std::cout << "Success...\n";
   return true;
 }
 
@@ -121,7 +121,7 @@ bool gaussseidelMorphed(sData* data, double** s)
   delete[] temp8;
 
   while(curIter<data->maxIter) {
-      std::cout << "\r\tGauss-Seidel: Iteration " << ++curIter;
+      /*std::cout << "\r\tGauss-Seidel: Iteration " <<*/ ++curIter;
       error =0;
       for(int i = 1; i < data->dimI-1; i++)
         {
@@ -148,9 +148,14 @@ bool gaussseidelMorphed(sData* data, double** s)
             }
         }
 
-      if(error < data->residuum)
+      if(error < data->residuum){
+        std::cout << "Residual r = "<< error << ", after "
+            << curIter << "# iterations \t";
+
         return true;
+      }
   }
+
   return true;
 }
 

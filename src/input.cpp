@@ -28,7 +28,7 @@
 //------------------------------------------------------
 bool input(const char* cfgFilePath, sData* data, int &errLine)
 {
-  std::cout << "\nInput:\n-------\n";
+  std::cout << "\nInput:\t-------\t";
 
   ///////////////////////
   // READ CONFIG FILE  //
@@ -79,5 +79,6 @@ bool input(const char* cfgFilePath, sData* data, int &errLine)
   data->s1      = allocGrid1Mem(data, MAXDOUBLE);
   data->xi      = allocGrid1Mem(data,MAXDOUBLE);
   data->eta     = allocGrid1Mem(data,MAXDOUBLE);
+  std::cout << "Success...\n";
   return true;
 }

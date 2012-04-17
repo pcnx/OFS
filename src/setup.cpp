@@ -26,7 +26,7 @@
 //------------------------------------------------------
 bool setup(sData* data)
 {
-  std::cout << "\nSetup:\n-------\n";
+  std::cout << "\nSetup:\t-------\t";
 
   ///////////////////
   // SETUP Xi Eta-GRID //
@@ -91,7 +91,7 @@ bool setup(sData* data)
       data->s1[data->dimI-1][j]= 1;//u_inf*1.f +Eover2PI * log((pow(0.1,2)+y*y))/2;
        */
   }
-
+  std::cout << "Success...\n";
   return true;
 }
 
