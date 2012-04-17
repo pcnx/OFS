@@ -1,9 +1,9 @@
-dimI		100
-dimJ		100
+dimI		5
+dimJ		5
 
-deltaX		0.01
-deltaY		0.01
+deltaX		0.2
+deltaY		0.2
 
-maxIter		100000
+maxIter		10000
 residuum	1.0E-2
 overrelax	1.0

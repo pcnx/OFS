@@ -32,8 +32,8 @@ bool setup(sData* data)
   ///////////////////
   for(int i=0; i<data->dimI; i++) {
       for(int j=0; j<data->dimJ; j++) {
-          data->x[i][j] = data->deltaX *i;
-          data->y[i][j] = data->deltaY *j;
+          data->x[i][j] = xof(data->deltaX *i);
+          data->y[i][j] = yof(data->deltaY *j,data->deltaX *i);
       }
   }
 

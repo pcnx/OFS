@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
   }
 
   std::cout << "Success...";
-  getchar();
+
 
   delete data;
   return 0;

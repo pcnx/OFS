@@ -4,7 +4,7 @@ close all
 
 
 load('scalar.dat');
-scalar = scalar(1:5:100,1:5:100);
+scalar = scalar(1:10,1:10);
 
 [U,V] = gradient(scalar);
 % figure(1)

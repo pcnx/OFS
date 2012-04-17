@@ -34,8 +34,8 @@ bool solve(sData* data)
 {
   std::cout << "\nSolve:\n-------\n";
 
-  //if(!gaussseidelMorphed(data,data->s1)){ return false; }
-  if(!gaussseidel(data,data->s1)){ return false; }
+  if(!gaussseidelMorphed(data,data->s1)){ return false; }
+  //if(!gaussseidel(data,data->s1)){ return false; }
   //if(!jacobi(data, data->s1))	{ return false; }
   //if(!thomas(data,data->s1))r	{ return false; }
 
@@ -81,12 +81,10 @@ bool gaussseidelMorphed(sData* data, double** s)
   float maxDiff = 0;
   float diff = s[0][0];
   float tmp;
-  double a1, a2, a3, a4 ,a5;
-  a1 =1;
-  a2 =2;
-  a3 =3;
-  a4 =4;
-  a5 =5;
+  double a1,a2,a3,a4,a5,a6;
+  double xix, xiy, etax,etay,xixx,xiyy,etaxx,etayy;
+
+
   while(curIter<data->maxIter) {
       std::cout << "\r\tGauss-Seidel: Iteration " << ++curIter;
       maxDiff =0;
@@ -94,23 +92,42 @@ bool gaussseidelMorphed(sData* data, double** s)
         {
           for(int j = 1 ; j < data->dimJ-1; j++)
             {
+              xix=dxi(data,i,j,1);
+              xiy=dxi(data,i,j,0);
+              etax=deta(data,i,j,1);
+              etay=deta(data,i,j,0);
+              xixx=ddxi(data,i,j,1);
+              xiyy=ddxi(data,i,j,0);
+              etaxx=ddeta(data,i,j,1);
+              etayy=ddeta(data,i,j,0);
+
+              a1 = xix*xix+xiy*xiy;
+              a2 = etax*etax+etay*etay;
+              a3 = 2* (xix*etax+xiy*etay);
+              a4 = xixx+xiyy;
+              a5 = etaxx+etayy;
+              a6 = 0;
+
 
               //Iterate over all values except border values
-              tmp = 1/(2*(a1+a2))*(a1 *(s[i+1][j]+s[i-1][j]) + a2* (s[i][j+1]+s[i][j-1]) +a3/4* (s[i+1][j+1]-s[i-1][j+1]-s[i+1][j-1]+s[i-1][j-1]) + a4/2 * (s[i+1][j]-s[i-1][j]) + a5/2 * (s[i][j+1]+s[i][j-1]));
+         //     tmp = 1/(2*(a1+a2-a6))*(a1 *(s[i+1][j]+s[i-1][j])
+           //      + a2* (s[i][j+1]+s[i][j-1]) +a3/4* (s[i+1][j+1]-s[i-1][j+1]-s[i+1][j-1]+s[i-1][j-1])
+             //     + a4/2 * (s[i+1][j]-s[i-1][j]) + a5/2 * (s[i][j+1]+s[i][j-1]));
 
-              /* my finite diff approach
-               * tmp =    s[i+1][j+1]   * (a3/4)
-               *        + s[i+1][j]     * (a1+a4/2)
-               *        + s[i+1][j-1]   * (-a3/4)
-               *        + s[i][j+1]     * (a2+a5/2)
-               *        + s[i][j-1]     * (a2-a5/2)
-               *        + s[i-1][j+1]   * (-a3/4)
-               *        + s[i-1][j]     * (a1-a4/2)
-               *        + s[i-1][j-1]   * (a3/4);
-               * tmp /= (a1+a2-a6);
-               *
-               *
-               */
+              // my finite diff approach
+                tmp =    s[i+1][j+1]   * (a3/4.f)
+                       + s[i+1][j]     * (a1+a4/2.f)
+                       + s[i+1][j-1]   * (-a3/4.f)
+                       + s[i][j+1]     * (a2+a5/2.f)
+                       + s[i][j-1]     * (a2-a5/2.f)
+                       + s[i-1][j+1]   * (-a3/4.f)
+                       + s[i-1][j]     * (a1-a4/2.f)
+                       + s[i-1][j-1]   * (a3/4.f);
+                tmp /=(a1+a2-a6);
+           //     if (tmp>1e10) { std::cout << "ERROR "; return -1;}
+
+
+
 
               diff = diff-tmp;
 
@@ -138,6 +155,7 @@ bool jacobi(sData* data, double** s)
   double** s_new = allocGrid1Mem(data,MAXDOUBLE);
   double error;
   double temp;
+
   for (int i= 0; i<data->dimI;i++){
       s_new[i][0] = s_old[i][0];
       s_new[i][data->dimJ-1]=s_old[i][data->dimJ-1];
@@ -154,6 +172,10 @@ bool jacobi(sData* data, double** s)
       for (int i=1;i< data->dimI-1;i++){
 
           for (int j=1;j<data->dimJ-1;j++){
+
+
+
+
               temp = (s_old[i-1][j] +s_old[i+1][j] + s_old[i][j-1]+s_old[i][j+1])/4.0;
               error += fabs( temp- s_old[i][j]);
               s_new[i][j] = temp;
@@ -164,7 +186,7 @@ bool jacobi(sData* data, double** s)
       s_old = s_new;
       s_new  = tmp_ptr;
 
-      // if (error < data->residuum) return true;
+       if (error < data->residuum) return true;
 
   }
 
