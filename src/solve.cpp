@@ -166,7 +166,7 @@ bool gaussseidelMorphed(sData* data, double** s)
                   std::cout << " a5 " << a5 << std::endl;
               }*/
 
-
+a1 = 10101001;
               a1 = xix*xix+xiy*xiy;
               a2 = etax*etax+etay*etay;
               a3 = 2* (xix*etax+xiy*etay);
