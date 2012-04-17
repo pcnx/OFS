@@ -51,10 +51,12 @@ bool gaussseidelMorphed(sData* data, double** s)
   int curIter=0;
   double error;
   float tmp;
-  double a1,a2,a3,a4,a5,a6;
+  double a1,a2,a3,a4,a5;
   int N=data->dimI-2;
   int M=data->dimJ-2;
-  double xix, xiy, etax,etay,xixx,xiyy,etaxx,etayy;
+
+  // allocate memory for derivatives
+  double ***alpha = new double**[N+2];
   double **temp1 = new double*[N+2];
   double **temp2 = new double*[N+2];
   double **temp3 = new double*[N+2];
@@ -63,6 +65,7 @@ bool gaussseidelMorphed(sData* data, double** s)
   double **temp6 = new double*[N+2];
   double **temp7 = new double*[N+2];
   double **temp8 = new double*[N+2];
+
   for (int i=0;i<N+2;i++){
       temp1[i] = new double[M+2];
       temp2[i] = new double[M+2];
@@ -72,36 +75,33 @@ bool gaussseidelMorphed(sData* data, double** s)
       temp6[i] = new double[M+2];
       temp7[i] = new double[M+2];
       temp8[i] = new double[M+2];
+      alpha[i] = new double* [M+2];
+  }
+  for (int i=0;i<N+2;i++){
+      for(int j=0;j<M+2;j++){
+          alpha[i][j] = new double[5];
+      }
   }
 
+  // write derivatives
   dxi(data,temp1,temp2);
   deta(data,temp3,temp4);
   ddxi(data,temp5,temp6);
   ddeta(data,temp7,temp8);
 
-  double alpha[N+2][M+2][5];
+  // calculate alpha
   for (int i=1;i<data->dimI-1;i++){
       for(int j=1;j<data->dimJ-1;j++){
           alpha[i][j][0] = temp1[i][j]*temp1[i][j]+temp2[i][j]*temp2[i][j];     //alpha1
           alpha[i][j][1] = temp3[i][j]*temp3[i][j]+temp4[i][j]*temp4[i][j];     //alpha2
           alpha[i][j][2] = 2*(temp1[i][j]*temp3[i][j]+temp2[i][j]*temp4[i][j]); //alpha3
-
           alpha[i][j][3] = temp5[i][j]+temp6[i][j];                             //alpha4
           alpha[i][j][4] = temp7[i][j]+temp8[i][j];                             //alpha5
-          std::cout << " xixx " <<temp5[i][j] << std::endl;
-          std::cout << " xiyy " << temp6[i][j] << std::endl;
-          std::cout << " etaxx " << temp7[i][j]  << std::endl;
-          std::cout << " etayy " << temp8[i][j]  << std::endl;
       }
   }
 
-
-
-
-  a6 = 0;
+  // free memory
   for (int i=0;i<N+2;i++){
-
-
       delete[] temp1[i];
       delete[] temp2[i];
       delete[] temp3[i];
@@ -110,8 +110,6 @@ bool gaussseidelMorphed(sData* data, double** s)
       delete[] temp6[i];
       delete[] temp7[i];
       delete[] temp8[i];
-
-
   }
   delete[] temp1;
   delete[] temp2;
@@ -122,7 +120,6 @@ bool gaussseidelMorphed(sData* data, double** s)
   delete[] temp7;
   delete[] temp8;
 
-
   while(curIter<data->maxIter) {
       std::cout << "\r\tGauss-Seidel: Iteration " << ++curIter;
       error =0;
@@ -130,72 +127,23 @@ bool gaussseidelMorphed(sData* data, double** s)
         {
           for(int j = 1 ; j < data->dimJ-1; j++)
             {
-              xix=dxi(data,i,j,1);
-              xiy=dxi(data,i,j,0);
-              etax=deta(data,i,j,1);
-              etay=deta(data,i,j,0);
-              xixx=ddxi(data,i,j,1);
-              xiyy=ddxi(data,i,j,0);
-              etaxx=ddeta(data,i,j,1);
-              etayy=ddeta(data,i,j,0);
-              if (fabs(xix)>1e3 ||fabs(xiy)>1e3 || fabs(etax)>1e3|| fabs(etay)>1e3|| fabs(xixx)>1e3||fabs(xiyy)>1e3|| fabs(etaxx)>1e3||fabs(etayy)>1e3){
-                  std::cout << "\n ERROR HIER IST WAS ZU GROSS \n";
-                  std::cout<< "xix " << xix <<std::endl;
-                  std::cout<< "xiy " << xiy <<std::endl;
-                  std::cout<< "xixx " << xixx <<std::endl;
-                  std::cout<< "xiyy " << xiyy <<std::endl;
-                  std::cout<< "etax " << etax <<std::endl;
-                  std::cout<< "etay " << etay <<std::endl;
-                  std::cout<< "etaxx " << etaxx <<std::endl;
-                  std::cout<< "etayy " << etayy <<std::endl;
-              }
-/*
               a1 = alpha[i][j][0];
               a2 = alpha[i][j][1];
               a3 = alpha[i][j][2];
               a4 = alpha[i][j][3];
               a5 = alpha[i][j][4];
-              */
-              /*
-              if (fabs(a1)+fabs(a2)+fabs(a3)+fabs(a4)+fabs(a5)>1e6){
-                  std::cout <<" ERROR somewhere in alpha" << std::endl;
-                  std::cout << " a1 " << a1 << std::endl;
-                  std::cout << " a2 " << a2<< std::endl;
-                  std::cout << " a3 " << a3 << std::endl;
-                  std::cout << " a4 " << a4 << std::endl;
-                  std::cout << " a5 " << a5 << std::endl;
-              }*/
 
-a1 = 10101001;
-              a1 = xix*xix+xiy*xiy;
-              a2 = etax*etax+etay*etay;
-              a3 = 2* (xix*etax+xiy*etay);
-              a4 = xixx+xiyy;
-              a5 = etaxx+etayy;
-
-
-
-
-              //Iterate over all values except border values
-              // peters code below, doesn't work ;)
-              /*tmp = 1/(2*(a1+a2-a6))*(a1 *(s[i+1][j]+s[i-1][j])
-                  + a2* (s[i][j+1]+s[i][j-1]) +a3/4* (s[i+1][j+1]-s[i-1][j+1]-s[i+1][j-1]+s[i-1][j-1])
-                  + a4/2 * (s[i+1][j]-s[i-1][j]) + a5/2 * (s[i][j+1]+s[i][j-1]));
-               */
-              // my finite diff approach
               tmp =    s[i+1][j+1]   * (a3/4.f)
-                           + s[i+1][j]     * (a1+a4/2.f)
-                           + s[i+1][j-1]   * (-a3/4.f)
-                           + s[i][j+1]     * (a2+a5/2.f)
-                           + s[i][j-1]     * (a2-a5/2.f)
-                           + s[i-1][j+1]   * (-a3/4.f)
-                           + s[i-1][j]     * (a1-a4/2.f)
-                           + s[i-1][j-1]   * (a3/4.f);
-              tmp /=(2*(a1+a2-a6));
-              if (tmp>1e10) { std::cout << "ERROR\n "  ;}
+                     + s[i+1][j]     * (a1+a4/2.f)
+                     + s[i+1][j-1]   * (-a3/4.f)
+                     + s[i][j+1]     * (a2+a5/2.f)
+                     + s[i][j-1]     * (a2-a5/2.f)
+                     + s[i-1][j+1]   * (-a3/4.f)
+                     + s[i-1][j]     * (a1-a4/2.f)
+                     + s[i-1][j-1]   * (a3/4.f);
+              tmp /=(2*(a1+a2));
 
               error += fabs(tmp-s[i][j]);
-
               s[i][j] = tmp;
             }
         }

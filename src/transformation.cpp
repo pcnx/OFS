@@ -133,8 +133,8 @@ void ddxi(sData* data, double** ddxidx, double** ddxidy){
       for (int j =1; j<data->dimJ-1;j++){
           x = data->x[i][j];
           y = data->y[i][j];
-          ddxidx[i][j] = (xiof(x+dx)-2*xiof(x)-xiof(x-dx)) /dx2;
-          ddxidy[i][j] = (xiof(y+dy)-2*xiof(y)-xiof(y-dy)) /dy2;
+          ddxidx[i][j] = (xiof(x+dx)-2*xiof(x)+xiof(x-dx)) /dx2;
+          ddxidy[i][j] = (xiof(y+dy)-2*xiof(y)+xiof(y-dy)) /dy2;
       }
   }
 
@@ -151,8 +151,8 @@ void ddeta(sData* data, double** ddetadx, double** ddetady){
       for (int j =1; j<data->dimJ-1;j++){
           x = data->x[i][j];
           y = data->y[i][j];
-          ddetadx[i][j] = (etaof(x+dx,y)-2*etaof(x,y)-etaof(x-dx,y)) /dx2;
-          ddetady[i][j] = (etaof(x,y+dy)-2*etaof(x,y)-etaof(x,y-dy)) /dy2;
+          ddetadx[i][j] = (etaof(x+dx,y)-2*etaof(x,y)+etaof(x-dx,y)) /dx2;
+          ddetady[i][j] = (etaof(x,y+dy)-2*etaof(x,y)+etaof(x,y-dy)) /dy2;
       }
   }
 
