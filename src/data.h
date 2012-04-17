@@ -56,6 +56,8 @@ struct sData {
   int maxIter;
   double residuum;
   double overrelax;
+  double finiteDiffDx;
+  double finiteDiffDy;
 };
 
 double**  allocGrid1Mem(const sData* const data, const double preset);

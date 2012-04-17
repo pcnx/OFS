@@ -1,9 +1,11 @@
-dimI		30
-dimJ		30
+dimI			30
+dimJ			30
 
-deltaXi		0.1
-deltaEta	0.1
+deltaXi			0.1
+deltaEta		0.1
 
-maxIter		100
-residuum	1.0E-2
-overrelax	1.0
+maxIter			100000
+residuum		1.0E-2
+overrelax		1.0
+finiteDiffDx 	1.0E-4
+finiteDiffDy 	1.0E-4

@@ -42,8 +42,8 @@ bool setup(sData* data)
   ///////////////////
   for(int i=0; i<data->dimI; i++) {
       for(int j=0; j<data->dimJ; j++) {
-          data->xi[i][j] = xof(data->xi[i][j]);
-          data->eta[i][j] = yof(data->xi[i][j],data->eta[i][j]);
+          data->x[i][j] = xof(data->xi[i][j]);
+          data->y[i][j] = yof(data->xi[i][j],data->eta[i][j]);
       }
   }
 
