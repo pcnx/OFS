@@ -126,7 +126,7 @@ void ddxi(sData* data, double** ddxidx, double** ddxidy){
   double dx = data->finiteDiffDx;
   double dy = data->finiteDiffDy;
   double dx2 = dx*dx;
-  double dy2 = dx*dy;
+  double dy2 = dy*dy;
   double x;
   double y;
   for (int i=1; i<data->dimI-1;i++){
@@ -144,7 +144,7 @@ void ddeta(sData* data, double** ddetadx, double** ddetady){
   double dx = data->finiteDiffDx;
   double dy = data->finiteDiffDy;
   double dx2 = dx*dx;
-  double dy2 = dx*dy;
+  double dy2 = dy*dy;
   double x;
   double y;
   for (int i=1; i<data->dimI-1;i++){

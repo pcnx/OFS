@@ -85,16 +85,17 @@ bool gaussseidelMorphed(sData* data, double** s)
           alpha[i][j][0] = temp1[i][j]*temp1[i][j]+temp2[i][j]*temp2[i][j];     //alpha1
           alpha[i][j][1] = temp3[i][j]*temp3[i][j]+temp4[i][j]*temp4[i][j];     //alpha2
           alpha[i][j][2] = 2*(temp1[i][j]*temp3[i][j]+temp2[i][j]*temp4[i][j]); //alpha3
+
           alpha[i][j][3] = temp5[i][j]+temp6[i][j];                             //alpha4
           alpha[i][j][4] = temp7[i][j]+temp8[i][j];                             //alpha5
+          std::cout << " xixx " <<temp5[i][j] << std::endl;
+          std::cout << " xiyy " << temp6[i][j] << std::endl;
+          std::cout << " etaxx " << temp7[i][j]  << std::endl;
+          std::cout << " etayy " << temp8[i][j]  << std::endl;
       }
   }
 
-  a1 = xix*xix+xiy*xiy;
-      a2 = etax*etax+etay*etay;
-      a3 = 2* (xix*etax+xiy*etay);
-      a4 = xixx+xiyy;
-      a5 = etaxx+etayy;
+
 
 
   a6 = 0;
@@ -148,13 +149,24 @@ bool gaussseidelMorphed(sData* data, double** s)
                   std::cout<< "etaxx " << etaxx <<std::endl;
                   std::cout<< "etayy " << etayy <<std::endl;
               }
-              /*
+/*
               a1 = alpha[i][j][0];
               a2 = alpha[i][j][1];
               a3 = alpha[i][j][2];
               a4 = alpha[i][j][3];
               a5 = alpha[i][j][4];
               */
+              /*
+              if (fabs(a1)+fabs(a2)+fabs(a3)+fabs(a4)+fabs(a5)>1e6){
+                  std::cout <<" ERROR somewhere in alpha" << std::endl;
+                  std::cout << " a1 " << a1 << std::endl;
+                  std::cout << " a2 " << a2<< std::endl;
+                  std::cout << " a3 " << a3 << std::endl;
+                  std::cout << " a4 " << a4 << std::endl;
+                  std::cout << " a5 " << a5 << std::endl;
+              }*/
+
+
               a1 = xix*xix+xiy*xiy;
               a2 = etax*etax+etay*etay;
               a3 = 2* (xix*etax+xiy*etay);
