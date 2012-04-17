@@ -39,16 +39,17 @@ struct sData {
   // grid settings
   int dimI;		// number of nodes in x/xi
   int dimJ;		// number of nodes in y/eta
-  double deltaX;          // delta x
-  double deltaY;          // delta y
+
+  double deltaXi;       // delta xi
+  double deltaEta;      // delta eta
+
 
   double** x;		// node position in x - x[i][j]
   double** y;		// node position in y - y[i][j]
+  double** xi;          // node position in xi - xi[i][j]
+  double** eta;         // node position in eta - eta[i][j]
 
-  double** s1;            // scalar value on node[i][j]
-
-  double** xi;
-  double** eta;
+  double** s1;          // scalar value on node[i][j]
 
 
   // solver settings

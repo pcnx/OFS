@@ -23,6 +23,7 @@
 #include "solve.h"
 #include "data.h"
 #include "setup.h"
+#include "transformation.h"
 
 
 float fabs(float x)
@@ -43,6 +44,82 @@ bool solve(sData* data)
 }
 
 //------------------------------------------------------
+
+
+bool gaussseidelMorphed(sData* data, double** s)
+{
+  int curIter=0;
+  double error;
+  float tmp;
+  double a1,a2,a3,a4,a5,a6;
+  double xix, xiy, etax,etay,xixx,xiyy,etaxx,etayy;
+
+
+  while(curIter<data->maxIter) {
+      std::cout << "\r\tGauss-Seidel: Iteration " << ++curIter;
+      error =0;
+      for(int i = 1; i < data->dimI-1; i++)
+        {
+          for(int j = 1 ; j < data->dimJ-1; j++)
+            {
+              xix=dxi(data,i,j,1);
+              xiy=dxi(data,i,j,0);
+              etax=deta(data,i,j,1);
+              etay=deta(data,i,j,0);
+              xixx=ddxi(data,i,j,1);
+              xiyy=ddxi(data,i,j,0);
+              etaxx=ddeta(data,i,j,1);
+              etayy=ddeta(data,i,j,0);
+              if (fabs(xix)>1e3 ||fabs(xiy)>1e3 || fabs(etax)>1e3|| fabs(etay)>1e3|| fabs(xixx)>1e3||fabs(xiyy)>1e3|| fabs(etaxx)>1e3||fabs(etayy)>1e3){
+                  std::cout << "\n ERROR HIER IST WAS ZU GROSS \n";
+                  std::cout<< "xix " << xix <<std::endl;
+                  std::cout<< "xiy " << xiy <<std::endl;
+                  std::cout<< "xixx " << xixx <<std::endl;
+                  std::cout<< "xiyy " << xiyy <<std::endl;
+                  std::cout<< "etax " << etax <<std::endl;
+                  std::cout<< "etay " << etay <<std::endl;
+                  std::cout<< "etaxx " << etaxx <<std::endl;
+                  std::cout<< "etayy " << etayy <<std::endl;
+              }
+
+              a1 = xix*xix+xiy*xiy;
+              a2 = etax*etax+etay*etay;
+              a3 = 2* (xix*etax+xiy*etay);
+              a4 = xixx+xiyy;
+              a5 = etaxx+etayy;
+              a6 = 0;
+
+
+              //Iterate over all values except border values
+              tmp = 1/(2*(a1+a2-a6))*(a1 *(s[i+1][j]+s[i-1][j])
+                  + a2* (s[i][j+1]+s[i][j-1]) +a3/4* (s[i+1][j+1]-s[i-1][j+1]-s[i+1][j-1]+s[i-1][j-1])
+                  + a4/2 * (s[i+1][j]-s[i-1][j]) + a5/2 * (s[i][j+1]+s[i][j-1]));
+
+              // my finite diff approach
+              /*  tmp =    s[i+1][j+1]   * (a3/4.f)
+                       + s[i+1][j]     * (a1+a4/2.f)
+                       + s[i+1][j-1]   * (-a3/4.f)
+                       + s[i][j+1]     * (a2+a5/2.f)
+                       + s[i][j-1]     * (a2-a5/2.f)
+                       + s[i-1][j+1]   * (-a3/4.f)
+                       + s[i-1][j]     * (a1-a4/2.f)
+                       + s[i-1][j-1]   * (a3/4.f);
+                tmp /=(2*(a1+a2-a6));*/
+              if (tmp>1e10) { std::cout << "ERROR\n "  ;}
+
+              error += fabs(tmp-s[i][j]);
+
+              s[i][j] = tmp;
+            }
+        }
+
+      if(error < data->residuum)
+        return true;
+  }
+  return true;
+}
+
+
 bool gaussseidel(sData* data, double** s)
 {
   int curIter=0;
@@ -75,79 +152,6 @@ bool gaussseidel(sData* data, double** s)
   return true;
 }
 
-bool gaussseidelMorphed(sData* data, double** s)
-{
-  int curIter=0;
-  float maxDiff = 0;
-  float diff = s[0][0];
-  float tmp;
-  double a1,a2,a3,a4,a5,a6;
-  double xix, xiy, etax,etay,xixx,xiyy,etaxx,etayy;
-
-
-  while(curIter<data->maxIter) {
-      std::cout << "\r\tGauss-Seidel: Iteration " << ++curIter;
-      maxDiff =0;
-      for(int i = 1; i < data->dimI-1; i++)
-        {
-          for(int j = 1 ; j < data->dimJ-1; j++)
-            {
-              xix=dxi(data,i,j,1);
-              xiy=dxi(data,i,j,0);
-              etax=deta(data,i,j,1);
-              etay=deta(data,i,j,0);
-              xixx=ddxi(data,i,j,1);
-              xiyy=ddxi(data,i,j,0);
-              etaxx=ddeta(data,i,j,1);
-              etayy=ddeta(data,i,j,0);
-              if (fabs(xix)>1e3 ||fabs(xiy)>1e3 || fabs(etax)>1e3|| fabs(etay)>1e3|| fabs(xixx)>1e3||fabs(xiyy)>1e3|| fabs(etaxx)>1e3||fabs(etayy)>1e3){
-                  std::cout << "\n ERROR HIER IST WAS ZU GROSS \n";
-              }
-
-              a1 = xix*xix+xiy*xiy;
-              a2 = etax*etax+etay*etay;
-              a3 = 2* (xix*etax+xiy*etay);
-              a4 = xixx+xiyy;
-              a5 = etaxx+etayy;
-              a6 = 0;
-
-
-              //Iterate over all values except border values
-             tmp = 1/(2*(a1+a2-a6))*(a1 *(s[i+1][j]+s[i-1][j])
-                 + a2* (s[i][j+1]+s[i][j-1]) +a3/4* (s[i+1][j+1]-s[i-1][j+1]-s[i+1][j-1]+s[i-1][j-1])
-                  + a4/2 * (s[i+1][j]-s[i-1][j]) + a5/2 * (s[i][j+1]+s[i][j-1]));
-
-              // my finite diff approach
-              /*  tmp =    s[i+1][j+1]   * (a3/4.f)
-                       + s[i+1][j]     * (a1+a4/2.f)
-                       + s[i+1][j-1]   * (-a3/4.f)
-                       + s[i][j+1]     * (a2+a5/2.f)
-                       + s[i][j-1]     * (a2-a5/2.f)
-                       + s[i-1][j+1]   * (-a3/4.f)
-                       + s[i-1][j]     * (a1-a4/2.f)
-                       + s[i-1][j-1]   * (a3/4.f);
-                tmp /=(2*(a1+a2-a6));*/
-             if (tmp>1e10) { std::cout << "ERROR\n "  ;}
-
-
-
-
-              diff = diff-tmp;
-
-              maxDiff += fabs(diff);
-              s[i][j] = tmp;
-
-            }
-
-        }
-
-
-      if(maxDiff < data->residuum)
-        break;
-
-  }
-  return true;
-}
 
 bool jacobi(sData* data, double** s)
 {
@@ -175,10 +179,6 @@ bool jacobi(sData* data, double** s)
       for (int i=1;i< data->dimI-1;i++){
 
           for (int j=1;j<data->dimJ-1;j++){
-
-
-
-
               temp = (s_old[i-1][j] +s_old[i+1][j] + s_old[i][j-1]+s_old[i][j+1])/4.0;
               error += fabs( temp- s_old[i][j]);
               s_new[i][j] = temp;
@@ -189,7 +189,7 @@ bool jacobi(sData* data, double** s)
       s_old = s_new;
       s_new  = tmp_ptr;
 
-       if (error < data->residuum) return true;
+      if (error < data->residuum) return true;
 
   }
 
@@ -212,10 +212,6 @@ bool jacobi(sData* data, double** s)
 }
 
 //------------------------------------------------------
-bool thomas(sData* data, double** s)
-{
-  // optional
-  return true;
-}
+
 
 

@@ -53,10 +53,10 @@ bool input(const char* cfgFilePath, sData* data, int &errLine)
           if(sscanf(line,"%15s %d",token,&data->dimI)	!= 2){ errLine = lineNo; return false; };
       } else if(!strcmp(token,"dimJ")) {
           if(sscanf(line,"%15s %d",token,&data->dimJ)	!= 2){ errLine = lineNo; return false; };
-      } else if(!strcmp(token,"deltaX")) {
-          if(sscanf(line,"%15s %lf",token,&data->deltaX)	!= 2){ errLine = lineNo; return false; };
-      } else if(!strcmp(token,"deltaY")) {
-          if(sscanf(line,"%15s %lf",token,&data->deltaY)	!= 2){ errLine = lineNo; return false; };
+      } else if(!strcmp(token,"deltaXi")) {
+          if(sscanf(line,"%15s %lf",token,&data->deltaXi)	!= 2){ errLine = lineNo; return false; };
+      } else if(!strcmp(token,"deltaEta")) {
+          if(sscanf(line,"%15s %lf",token,&data->deltaEta)	!= 2){ errLine = lineNo; return false; };
       } else if(!strcmp(token,"maxIter")) {
           if(sscanf(line,"%15s %d",token,&data->maxIter)	!= 2){ errLine = lineNo; return false; };
       } else if(!strcmp(token,"residuum")) {
