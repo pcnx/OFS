@@ -1,5 +1,5 @@
-dimI		3
-dimJ		3
+dimI		30
+dimJ		30
 
 deltaXi		0.1
 deltaEta	0.1
