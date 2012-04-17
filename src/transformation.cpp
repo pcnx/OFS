@@ -29,60 +29,6 @@ double yof(double xi, double eta){
 }
 
 
-double dxi(sData* data, int i, int j, bool xdirection){
-  double dx = data->finiteDiffDx;
-  double dy = data->finiteDiffDy;
-
-  if (xdirection){
-      return (xiof(data->x[i][j]+dx)-xiof(data->x[i][j]-dx))/(2*dx);
-  }
-  else{
-      return (xiof(data->y[i][j]+dy)-xiof(data->y[i][j]-dy))/(2*dy);
-  }
-}
-
-double deta(sData* data, int i, int j, bool xdirection){
-  double dx = data->finiteDiffDx;
-  double dy = data->finiteDiffDy;
-
-  if (xdirection){
-      return (etaof(data->x[i][j]+dx,data->y[i][j])-etaof(data->x[i][j]-dx,data->y[i][j]))/(2*dx);
-  }
-  else{
-      return (etaof(data->x[i][j],data->y[i][j]+dy)-etaof(data->x[i][j],data->y[i][j]-dy))/(2*dy);
-  }
-}
-
-
-
-double ddxi(sData* data, int i, int j, bool xdirection){
-  double dx = data->finiteDiffDx;
-  double dy = data->finiteDiffDy;
-
-  if (xdirection){
-      return (xiof(data->x[i][j]+dx)-2*xiof(data->x[i][j])+xiof(data->x[i][j]-dx))/(dx*dx);
-  }
-  else{
-      return (xiof(data->y[i][j]+dy)-2*xiof(data->y[i][j])+xiof(data->y[i][j]-dy))/(dy*dy);
-  }
-}
-
-double ddeta(sData* data, int i, int j, bool xdirection){
-  double dx = data->finiteDiffDx;
-  double dy = data->finiteDiffDy;
-
-  if (xdirection){
-      return (etaof(data->x[i][j]+dx,data->y[i][j])
-          -2*etaof(data->x[i][j],data->y[i][j])
-      +etaof(data->x[i][j]-dx,data->y[i][j]))/(dx*dx);
-  }
-  else{
-      return (etaof(data->x[i][j],data->y[i][j]+dy)
-          -2*etaof(data->x[i][j],data->y[i][j])
-      +etaof(data->x[i][j],data->y[i][j]-dy))/(dy*dy);
-  }
-}
-
 
 
 
